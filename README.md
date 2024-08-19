@@ -216,3 +216,166 @@ Go 的很多语言特性借鉴与它的三个祖先：C，Pascal 和 CSP。Go �
 ### Go
 
 编程界的小鲜肉。高并发能力无人能及。即具有像 Python 一样的简洁代码、开发速度，又具有 C 语言一样的执行效率，优势突出。
+
+## Go 源码文件
+
+![GO源码文件分类](https://image.fu-jw.com/img/2024/08/19/66c29479dc97a.png)
+
+### 命令源码文件
+
+声明自己属于 main 代码包、包含无参数声明和结果声明的 main 函数。
+
+命令源码文件被安装以后，GOPATH 如果只有一个工作区，那么相应的可执行文件会被存放当前工作区的 bin 文件夹下；如果有多个工作区，就会安装到 GOBIN 指向的目录下。
+
+命令源码文件是 Go 程序的入口。
+
+同一个代码包中最好也不要放多个命令源码文件。多个命令源码文件虽然可以分开单独 go run 运行起来，但是无法通过 go build 和 go install。
+
+```go
+package main
+import "fmt"
+func main(){
+	fmt.Print("Hello World !!!")
+}
+```
+
+> 注意：文件夹中放了两个命令源码文件，同时都声明自己属于 main 代码包时
+>
+> - 两个文件都可执行命令：`go run`
+> - 不可以使用命令 `go build`和`go install`
+> - 所以命令源码文件应该是被单独放在一个代码包中
+
+### 库源码文件
+
+库源码文件就是不具备命令源码文件上述两个特征的源码文件。存在于某个代码包中的普通的源码文件。
+
+库源码文件被安装后，相应的归档文件（.a 文件）会被存放到当前工作区的 pkg 的平台相关目录下。
+
+### 测试源码文件
+
+名称以 \_test.go 为后缀的代码文件，并且必须包含 Test 或者 Benchmark 名称前缀的函数：
+
+```go
+func TestXXX( t *testing.T) {
+
+}
+```
+
+名称以 Test 为名称前缀的函数，只能接受 \*testing.T 的参数，这种测试函数是功能测试函数。
+
+```go
+func BenchmarkXXX( b *testing.B) {
+
+}
+```
+
+名称以 Benchmark 为名称前缀的函数，只能接受 \*testing.B 的参数，这种测试函数是性能测试函数。
+
+## Go 的命令
+
+目前 Go 的最新版 1.23 里面基本命令有以下 19 个
+
+```txt
+The commands are:
+
+	bug         start a bug report
+	build       compile packages and dependencies
+	clean       remove object files and cached files
+	doc         show documentation for package or symbol
+	env         print Go environment information
+	fix         update packages to use new APIs
+	fmt         gofmt (reformat) package sources
+	generate    generate Go files by processing source
+	get         add dependencies to current module and install them
+	install     compile and install packages and dependencies
+	list        list packages or modules
+	mod         module maintenance
+	work        workspace maintenance
+	run         compile and run Go program
+	telemetry   manage telemetry data and settings
+	test        test packages
+	tool        run specified go tool
+	version     print Go version
+	vet         report likely mistakes in packages
+```
+
+### go run
+
+专门用来运行命令源码文件的命令，注意，这个命令不是用来运行所有 Go 的源码文件的！
+
+go run 命令只能接受一个命令源码文件以及若干个库源码文件（必须同属于 main 包）作为文件参数，且不能接受测试源码文件。它在执行时会检查源码文件的类型。如果参数中有多个或者没有命令源码文件，那么 go run 命令就只会打印错误提示信息并退出，而不会继续执行。
+
+> 使用 `go run -n test.go` 可以查看执行过程
+>
+> - 先执行了 compile 命令
+> - 然后 link，生成了归档文件.a 和 最终可执行文件
+> - 最终的可执行文件放在 exe 文件夹里面
+> - 命令的最后一步就是执行了可执行文件
+
+![go run 执行过程](https://image.fu-jw.com/img/2024/08/19/66c29db642183.png)
+
+### go build
+
+主要是用于测试编译。在包的编译过程中，若有必要，会同时编译与之相关联的包。
+
+1. 如果是普通包，当你执行 go build 命令后，不会产生任何文件。
+2. 如果是 main 包，当只执行 go build 命令后，会在当前目录下生成一个可执行文件。如果需要在$GOPATH/bin 目录下生成相应的 exe 文件，需要执行 go install 或者使用 go build -o 路径/可执行文件。
+3. 如果某个文件夹下有多个文件，而你只想编译其中某一个文件，可以在 go build 之后加上文件名，例如 go build a.go；go build 命令默认会编译当前目录下的所有 go 文件。
+4. 你也可以指定编译输出的文件名。比如，我们可以指定 go build -o 可执行文件名，默认情况是你的 package 名(非 main 包)，或者是第一个源文件的文件名(main 包)。
+5. go build 会忽略目录下以”\_”或者”.”开头的 go 文件。
+6. 如果你的源代码针对不同的操作系统需要不同的处理，那么你可以根据不同的操作系统后缀来命名文件。
+
+当代码包中有且仅有一个命令源码文件的时候，在文件夹所在目录中执行 go build 命令，会在该目录下生成一个与**目录同名的可执行文件**，
+
+- 因此不可在统一目录下存在两个命令源码文件！
+- 此时执行命令`go install`就会将可执行文件移动到 bin 目录下
+
+go build 和 go install
+
+- go build 编译命令源码文件，则会在该命令的执行目录中生成一个可执行文件
+- go build 后面不追加目录路径的话，它就把当前目录作为代码包并进行编译。go build 命令后面如果跟了代码包导入路径作为参数，那么该代码包及其依赖都会被编译。
+
+> 注意如果 go build 用来编译非命令源码文件，即库源码文件，go build 执行完是不会产生任何结果的。
+> 这种情况下，go build 命令只是检查库源码文件的有效性，只会做检查性的编译，而不会输出任何结果文件。
+
+![go build 执行过程](https://image.fu-jw.com/img/2024/08/19/66c2a24140199.png)
+
+### go install
+
+用来编译并安装代码包或者源码文件
+
+go install 命令在内部实际上分成了两步操作：第一步是生成结果文件(可执行文件或者.a 包)，第二步会把编译好的结果移到$GOPATH/pkg或者​$GOPATH/bin。
+
+- 可执行文件： 一般是 go install 带 main 函数的 go 文件产生的，有函数入口，所有可以直接运行。
+- .a 应用包： 一般是 go install 不包含 main 函数的 go 文件产生的，没有函数入口，只能被调用。
+
+go install 用于编译并安装指定的代码包及它们的依赖包。当指定的代码包的依赖包还没有被编译和安装时，该命令会先去处理依赖包。与 go build 命令一样，传给 go install 命令的代码包参数应该以导入路径的形式提供。并且，go build 命令的绝大多数标记也都可以用于 实际上，go install 命令只比 go build 命令多做了一件事，即：安装编译后的结果文件到指定目录。
+
+安装代码包会在当前工作区的 pkg 的平台相关目录下生成归档文件（即 .a 文件）。 安装命令源码文件会在当前工作区的 bin 目录（如果 GOPATH 下有多个工作区，就会放在 GOBIN 目录下）生成可执行文件。
+
+- go install 命令如果后面不追加任何参数，它会把当前目录作为代码包并安装。这和 go build 命令是完全一样的。
+- go install 命令后面如果跟了代码包导入路径作为参数，那么该代码包及其依赖都会被安装。
+- go install 命令后面如果跟了命令源码文件以及相关库源码文件作为参数的话，只有这些文件会被编译并安装。
+
+![go install 执行过程](https://image.fu-jw.com/img/2024/08/19/66c2a4de808d0.png)
+
+### go get
+
+用于从远程代码仓库（比如 Github ）上下载并安装代码包。
+
+> 注意，go get 命令会把当前的代码包下载到 $GOPATH 中的第一个工作区的 src 目录中，并安装。
+
+> 智能下载: 在使用它检出或更新代码包之后，它会寻找与本地已安装 Go 语言的版本号相对应的标签（tag）或分支（branch）。比如，本机安装 Go 语言的版本是 1.x，那么 go get 命令会在该代码包的远程仓库中寻找名为 “go1” 的标签或者分支。如果找到指定的标签或者分支，则将本地代码包的版本切换到此标签或者分支。如果没有找到指定的标签或者分支，则将本地代码包的版本切换到主干的最新版本。
+
+![go get 执行过程](https://image.fu-jw.com/img/2024/08/19/66c2a6da898e1.png)
+
+### 其他命令
+
+- go clean 命令是用来移除当前源码包里面编译生成的文件
+- go fmt 命令主要是用来帮你格式化所写好的代码文件
+- go test 命令，会自动读取源码目录下面名为\*\_test.go 的文件，生成并运行测试用的可执行文件
+- go doc 命令其实就是一个很强大的文档工具
+- go fix 用来修复以前老版本的代码到新版本，例如 go1 之前老版本的代码转化到 go1
+- go version 查看 go 当前的版本
+- go env 查看当前 go 的环境变量
+- go list 列出当前全部安装的 package
