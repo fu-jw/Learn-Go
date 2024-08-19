@@ -379,3 +379,97 @@ go install 用于编译并安装指定的代码包及它们的依赖包。当指
 - go version 查看 go 当前的版本
 - go env 查看当前 go 的环境变量
 - go list 列出当前全部安装的 package
+
+## 命名规范
+
+命名是代码规范中很重要的一部分，统一的命名规则有利于提高的代码的可读性，好的命名仅仅通过命名就可以获取到足够多的信息。
+
+Go 在命名时以字母 a 到 Z 或 a 到 Z 或下划线开头，后面跟着零或更多的字母、下划线和数字(0 到 9)。Go 不允许在命名时中使用@、$和%等标点符号。Go 是一种区分大小写的编程语言。因此，Manpower 和 manpower 是两个不同的命名。
+
+- 当命名（包括常量、变量、类型、函数名、结构字段等等）以一个大写字母开头，如：Group1，那么使用这种形式的标识符的对象就可以被外部包的代码所使用（客户端程序需要先导入这个包），这被称为导出（像面向对象语言中的 public）；
+- 命名如果以小写字母开头，则对包外是不可见的，但是他们在整个包的内部是可见并且可用的（像面向对象语言中的 private ）
+
+### 包命名：package
+
+保持 package 的名字和目录保持一致，尽量采取有意义的包名，简短，有意义，尽量和标准库不要冲突。包名应该为小写单词，不要使用下划线或者混合大小写。
+
+```go
+package demo
+
+package main
+```
+
+### 文件命名
+
+尽量采取有意义的文件名，简短，有意义，应该为小写单词，使用下划线分隔各个单词。
+
+```go
+my_test.go
+```
+
+### 结构体命名
+
+- 采用驼峰命名法，首字母根据访问控制大写或者小写
+
+- struct 申明和初始化格式采用多行，例如下面：
+
+```go
+// 多行声明
+type User struct{
+    Username  string
+    Email     string
+}
+
+// 多行初始化
+u := User{
+    Username: "fredo",
+    Email:    "coderfredo@gmail.com",
+}
+
+```
+
+### 接口命名
+
+- 命名规则基本和上面的结构体类型
+- 单个函数的结构名以 “er” 作为后缀，例如 Reader , Writer 。
+
+```go
+type Reader interface {
+        Read(p []byte) (n int, err error)
+}
+
+```
+
+### 变量命名
+
+- 和结构体类似，变量名称一般遵循驼峰法，首字母根据访问控制原则大写或者小写，但遇到特有名词时，需要遵循以下规则：
+  - 如果变量为私有，且特有名词为首个单词，则使用小写，如 apiClient
+  - 其它情况都应当使用该名词原有的写法，如 APIClient、repoID、UserID
+  - 错误示例：UrlArray，应该写成 urlArray 或者 URLArray
+- 若变量类型为 bool 类型，则名称应以 Has, Is, Can 或 Allow 开头
+
+```go
+var isExist bool
+var hasConflict bool
+var canManage bool
+var allowGitHook bool
+```
+
+### 常量命名
+
+常量均需使用全部大写字母组成，并使用下划线分词
+
+```go
+const APP_VER = "1.0"
+```
+
+如果是枚举类型的常量，需要先创建相应类型：
+
+```go
+type Scheme string
+
+const (
+    HTTP  Scheme = "http"
+    HTTPS Scheme = "https"
+)
+```
