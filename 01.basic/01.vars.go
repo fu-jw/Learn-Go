@@ -54,6 +54,7 @@ func vars() {
 	var n1, f1, s1 = 100, 3.14, "Go"
 	fmt.Println(n1, f1, s1)
 
+	// 一组变量
 	var (
 		name2 = "小美"
 		age   = 18
@@ -74,6 +75,6 @@ func vars() {
 }
 
 // 同一个目录下只能有一个 main 函数
-func main() {
-	vars()
-}
+// func main() {
+// 	vars()
+// }
