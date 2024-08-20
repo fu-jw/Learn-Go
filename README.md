@@ -473,3 +473,98 @@ const (
     HTTPS Scheme = "https"
 )
 ```
+
+## 关键字
+
+关键字是一些特殊的用来帮助编译器理解和解析源代码的单词。
+
+Go 中共有 25 个关键字：
+
+```txt
+break     default      func    interface  select
+case      defer        go      map        struct
+chan      else         goto    package    switch
+const     fallthrough  if      range      type
+continue  for          import  return     var
+```
+
+这些关键字可以分为四组：
+
+- const、func、import、package、type 和 var 用来声明各种代码元素。
+- chan、interface、map 和 struct 用做 一些组合类型的字面表示中。
+- break、case、continue、default、 else、fallthrough、for、 goto、if、range、 return、- - select 和 switch 用在流程控制语句中。 详见基本流程控制语法。
+- defer 和 go 也可以看作是流程控制关键字， 但它们有一些特殊的作用。详见协程和延迟函数调用。
+
+## 变量
+
+变量是为存储特定类型的值而提供给内存位置的名称。在 go 中声明变量有多种语法。
+
+本质就是一小块内存，用于存储数据，在程序运行过程中数值可以改变
+
+### 声明变量
+
+使用关键字 var
+
+- 第一种，指定变量类型，声明后若不赋值，使用默认值
+
+```go
+var name type
+name = value
+```
+
+- 第二种，根据值自行判定变量类型(类型推断 Type inference)
+  如果一个变量有一个初始值，Go 将自动能够使用初始值来推断该变量的类型。因此，如果变量具有初始值，则可以省略变量声明中的类型
+
+```go
+var name = value
+```
+
+- 第三种，简短声明，省略 var, 注意 :=左侧的变量不应该是已经声明过的(多个变量同时声明时，至少保证一个是新变量)，否则会导致编译错误
+
+```go
+name := value
+
+// 例如
+sum := 100
+fmt.Println(sum)
+```
+
+也可以一行多个变量
+
+```go
+// 同一类型
+var m, n int = 111, 222
+
+// 类型推断
+var n1, f1, s1 = 100, 3.14, "Go"
+
+var (
+stuName = "小美"
+age     = 18
+sex     = "女"
+)
+```
+
+注意：
+
+1. 变量必须先定义才能使用
+2. 变量的类型和赋值必须一致
+3. 同一个作用域内，变量名不能冲突
+4. 简短定义方式，左边的变量至少有一个是新的
+5. 简短定义方式，不能定义全局变量
+6. 变量的零值，就是默认值
+   整型：默认值是 0
+   浮点类型：默认是 0
+   字符串：默认值""
+
+```go
+var x int //整数，默认值是0
+fmt.Println(x)
+var y float64 //0.0-->0
+fmt.Println(y)
+var str string //""
+fmt.Println(str)
+var s2 []int //切片[]
+fmt.Println(s2)
+fmt.Println(s2 == nil)
+```
