@@ -3,6 +3,14 @@ package main
 import "fmt"
 
 func funcIOTA() {
+
+	const (
+		x = iota
+		y = iota
+		z = iota
+	)
+	fmt.Println(x, y, z) // 0 1 2
+
 	const (
 		a = iota //0
 		b        //1
