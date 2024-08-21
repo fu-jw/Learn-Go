@@ -761,3 +761,92 @@ Go 语言按类别有以下几种数据类型：
 | 1      | \|\|              |
 
 当然，你可以通过使用括号来临时提升某个表达式的整体运算优先级。
+
+## IO
+
+主要由`fmt`包实现输入输出，实现了类似 C 语言 printf 和 scanf 的格式化 I/O
+
+官网资料：<https://golang.google.cn/pkg/fmt/>
+
+### 打印输出
+
+**打印：**
+
+[func Print(a ...interface{}) (n int, err error)](https://golang.google.cn/pkg/fmt/#Print)
+
+**格式化打印：**
+
+[func Printf(format string, a ...interface{}) (n int, err error)](https://golang.google.cn/pkg/fmt/#Printf)
+
+**打印后换行**
+
+[func Println(a ...interface{}) (n int, err error)](https://golang.google.cn/pkg/fmt/#Println)
+
+格式化打印中的常用占位符：
+
+```txt
+格式化打印占位符：
+    %v,原样输出
+    %T，打印类型
+    %t,bool类型
+    %s，字符串
+    %f，浮点
+    %d，10进制的整数
+    %b，2进制的整数
+    %o，8进制
+    %x，%X，16进制
+      %x：0-9，a-f
+      %X：0-9，A-F
+    %c，打印字符
+    %p，打印地址
+    。。。
+```
+
+示例代码：
+
+```go
+func out() {
+  a := 100           //int
+  b := 3.14          //float64
+  c := true          // bool
+  d := "Hello World" //string
+  e := `Fredo`        //string
+  f := 'A'
+  fmt.Printf("%T,%b\n", a, a)
+  fmt.Printf("%T,%f\n", b, b)
+  fmt.Printf("%T,%t\n", c, c)
+  fmt.Printf("%T,%s\n", d, d)
+  fmt.Printf("%T,%s\n", e, e)
+  fmt.Printf("%T,%d,%c\n", f, f, f)
+  fmt.Println("-----------------------")
+  fmt.Printf("%v\n", a)
+  fmt.Printf("%v\n", b)
+  fmt.Printf("%v\n", c)
+  fmt.Printf("%v\n", d)
+  fmt.Printf("%v\n", e)
+  fmt.Printf("%v\n", f)
+}
+```
+
+### 键盘输入
+
+常用方法：
+
+[func Scan(a ...interface{}) (n int, err error)](https://golang.google.cn/pkg/fmt/#Scan)
+
+[func Scanf(format string, a ...interface{}) (n int, err error)](https://golang.google.cn/pkg/fmt/#Scanf)
+
+[func Scanln(a ...interface{}) (n int, err error)](https://golang.google.cn/pkg/fmt/#Scanln)
+
+```go
+func in() {
+  var x int
+  var y float64
+  fmt.Println("请输入一个整数，一个浮点类型：")
+  fmt.Scanln(&x, &y) //读取键盘的输入，通过操作地址，赋值给x和y   阻塞式
+  fmt.Printf("x的数值：%d，y的数值：%f\n", x, y)
+
+  fmt.Scanf("%d,%f", &x, &y)
+  fmt.Printf("x:%d,y:%f\n", x, y)
+}
+```
