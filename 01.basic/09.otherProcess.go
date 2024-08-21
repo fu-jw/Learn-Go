@@ -42,8 +42,8 @@ LOOP:
 }
 
 // 同一个目录下只能有一个 main 函数
-func main() {
-	funcBreak()
-	funcContinue()
-	funcGoto()
-}
+// func main() {
+// 	funcBreak()
+// 	funcContinue()
+// 	funcGoto()
+// }
