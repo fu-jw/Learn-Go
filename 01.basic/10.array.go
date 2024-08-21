@@ -2,7 +2,6 @@ package main
 
 import "fmt"
 
-// break
 func funcArray() {
 	var n [10]int /* n 是一个长度为 10 的数组 */
 	var i, j int
@@ -38,7 +37,7 @@ func funcArray() {
 	fmt.Println("bb is ", bb)
 }
 
-// 同一个目录下只能有一个 main 函数
-func main() {
-	funcArray()
-}
+// // 同一个目录下只能有一个 main 函数
+// func main() {
+// 	funcArray()
+// }

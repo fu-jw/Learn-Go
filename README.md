@@ -1322,3 +1322,148 @@ a := [3]int{5, 78, 8}
 var b [5]int
 b = a //not possible since [3]int and [5]int are distinct types
 ```
+
+## 切片
+
+### 切片概述
+
+Go 语言切片是对数组的抽象。
+Go 数组的长度不可改变，在特定场景中这样的集合就不太适用，Go 中提供了一种灵活，功能强悍的内置类型切片("动态数组"),与数组相比切片的长度是不固定的，可以追加元素，在追加时可能使切片的容量增大
+
+切片是一种方便、灵活且强大的包装器。切片本身没有任何数据。它们只是对现有数组的引用。
+
+切片与数组相比，不需要设定长度，在[]中不用设定值，相对来说比较自由
+
+从概念上面来说 slice 像一个结构体，这个结构体包含了三个元素：
+
+1. 指针，指向数组中 slice 指定的开始位置
+2. 长度，即 slice 的长度
+3. 最大长度，也就是 slice 开始位置到数组的最后位置的长度
+
+### 切片语法
+
+**定义切片**：
+
+```go
+var identifier []type
+```
+
+切片不需要说明长度。
+或使用 make()函数来创建切片:
+
+```go
+var slice1 []type = make([]type, len)
+// 也可以简写为
+slice1 := make([]type, len)
+```
+
+```go
+make([]T, length, capacity)
+```
+
+**初始化**：
+
+```go
+s[0] = 1
+s[1] = 2
+s[2] = 3
+```
+
+```go
+s :=[] int {1,2,3 }
+```
+
+```go
+s := arr[startIndex:endIndex]
+```
+
+将 arr 中从下标 startIndex 到 endIndex-1 下的元素创建为一个新的切片（**前闭后开**），长度为 endIndex-startIndex
+
+```go
+s := arr[startIndex:]
+```
+
+缺省 endIndex 时将表示一直到 arr 的最后一个元素
+
+```go
+s := arr[:endIndex]
+```
+
+缺省 startIndex 时将表示从 arr 的第一个元素开始
+
+```go
+func main() {
+  a := [5]int{76, 77, 78, 79, 80}
+  var slice_b []int = slice_a[1:4] //creates b slice from a[1] to a[3]
+  fmt.Println(slice_b)
+}
+```
+
+### 修改切片
+
+slice 没有自己的任何数据。它只是底层数组的一个表示。对 slice 所做的任何修改都将反映在底层数组中。
+
+示例代码：
+
+```go
+  // 修改切片
+  slice_c := [...]int{57, 89, 90, 82, 100, 78, 67, 69, 59}
+  slice_d := slice_c[2:5]
+  fmt.Println("array before", slice_c)
+  // array before [57 89 90 82 100 78 67 69 59]
+  for i := range slice_d {
+    slice_d[i]++
+  }
+  fmt.Println("array after", slice_c)
+  // array after [57 89 91 83 101 78 67 69 59]
+```
+
+当多个片共享相同的底层数组时，每个元素所做的更改将在数组中反映出来。
+
+```go
+  num := [3]int{78, 79, 80}
+  slice_e := num[:] //creates a slice which contains all elements of the array
+  slice_f := num[:]
+  fmt.Println("array before change 1", num)
+  // array before change 1 [78 79 80]
+  slice_e[0] = 100
+  fmt.Println("array after modification to slice slice_e", num)
+  // array after modification to slice slice_e [100 79 80]
+  slice_f[1] = 101
+  fmt.Println("array after modification to slice slice_f", num)
+  // array after modification to slice slice_f [100 101 80]
+```
+
+### len 和 cap
+
+切片的长度是切片中元素的数量。
+切片的容量是从创建切片的索引开始的底层数组中元素的数量。
+
+切片是可索引的，并且可以由 len() 方法获取长度
+切片提供了计算容量的方法 cap() 可以测量切片最长可以达到多少
+
+```go
+  var number1 = make([]int, 3, 5)
+  fmt.Printf("len=%d cap=%d slice=%v\n", len(number1), cap(number1), number1)
+  // len=3 cap=5 slice=[0 0 0]
+
+  // 一个切片在未初始化之前默认为 nil，长度为 0
+  var number2 []int
+  fmt.Printf("len=%d cap=%d slice=%v\n", len(number2), cap(number2), number2)
+  // len=0 cap=0 slice=[]
+  if number2 == nil {
+    fmt.Printf("切片是空的")
+  }
+  // 切片是空的
+```
+
+### append 和 copy
+
+append 向 slice 里面追加一个或者多个元素，然后返回一个和 slice 一样类型的 slice
+copy 函数 copy 从源 slice 的 src 中复制元素到目标 dst，并且返回复制的元素的个数
+
+append 函数会改变 slice 所引用的数组的内容，从而影响到引用同一数组的其它 slice。 但当 slice 中没有剩
+余空间（即(cap-len) == 0）时，此时将动态分配新的数组空间。返回的 slice 数组指针将指向这个空间，而原
+数组的内容将保持不变；其它引用此数组的 slice 则不受影响
+
+下面的代码描述了从拷贝切片的 copy 方法和向切片追加新元素的 append 方法
