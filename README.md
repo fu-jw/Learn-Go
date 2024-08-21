@@ -1467,3 +1467,27 @@ append 函数会改变 slice 所引用的数组的内容，从而影响到引用
 数组的内容将保持不变；其它引用此数组的 slice 则不受影响
 
 下面的代码描述了从拷贝切片的 copy 方法和向切片追加新元素的 append 方法
+
+```go
+  var numbers []int
+  printSlice(numbers)
+
+  /* 允许追加空切片 */
+  numbers = append(numbers, 0)
+  printSlice(numbers)
+
+  /* 向切片添加一个元素 */
+  numbers = append(numbers, 1)
+  printSlice(numbers)
+
+  /* 同时添加多个元素 */
+  numbers = append(numbers, 2, 3, 4)
+  printSlice(numbers)
+
+  /* 创建切片 numbers1 是之前切片的两倍容量*/
+  numbers1 := make([]int, len(numbers), (cap(numbers))*2)
+
+  /* 拷贝 numbers 的内容到 numbers1 */
+  copy(numbers1, numbers)
+  printSlice(numbers1)
+```

@@ -75,6 +75,6 @@ func printSlice(x []int) {
 }
 
 // 同一个目录下只能有一个 main 函数
-func main() {
-	funcSlice()
-}
+// func main() {
+// 	funcSlice()
+// }
