@@ -1095,3 +1095,78 @@ for key, value := range oldMap {
     newMap[key] = value
 }
 ```
+
+### break、continue、goto
+
+#### break
+
+跳出循环体。break 语句用于在结束其正常执行之前突然终止 for 循环
+
+```go
+func funcBreak() {
+  for i := 1; i <= 10; i++ {
+    if i > 5 {
+      break //loop is terminated if i > 5
+    }
+    fmt.Printf("%d ", i)
+  }
+  fmt.Printf("\nline after for loop")
+}
+```
+
+#### continue
+
+跳出一次循环。continue 语句用于跳过 for 循环的当前迭代。在 continue 语句后面的 for 循环中的所有代码将不会在当前迭代中执行。循环将继续到下一个迭代。
+
+```go
+func funcContinue() {
+  for i := 1; i <= 10; i++ {
+    if i%2 == 0 {
+      continue
+    }
+    fmt.Printf("%d ", i)
+  }
+}
+```
+
+#### goto
+
+可以无条件地转移到过程中指定的行
+
+```go
+func funcGoto() {
+  /* 定义局部变量 */
+  var a int = 10
+
+/* 循环 */
+LOOP:
+  for a < 20 {
+    if a == 15 {
+      /* 跳过迭代 */
+      a = a + 1
+      goto LOOP
+    }
+    fmt.Printf("a的值为 : %d\n", a)
+    a++
+  }
+}
+```
+
+统一错误处理
+多处错误处理存在代码重复时是非常棘手的，例如：
+
+```go
+  err := firstCheckError()
+  if err != nil {
+      goto onExit
+  }
+  err = secondCheckError()
+  if err != nil {
+      goto onExit
+  }
+  fmt.Println("done")
+  return
+onExit:
+    fmt.Println(err)
+    exitProcess()
+```

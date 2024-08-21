@@ -32,6 +32,6 @@ func cyclic() {
 }
 
 // 同一个目录下只能有一个 main 函数
-func main() {
-	cyclic()
-}
+// func main() {
+// 	cyclic()
+// }
