@@ -2,7 +2,7 @@ package main
 
 import "fmt"
 
-func dataType() {
+func operation() {
 	var i int
 	var f float64
 	var b bool
@@ -17,6 +17,6 @@ func dataType() {
 }
 
 // 同一个目录下只能有一个 main 函数
-func main() {
-	dataType()
-}
+// func main() {
+// 	operator()
+// }
