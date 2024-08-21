@@ -1043,3 +1043,55 @@ func switch_branch() {
 > 1. case 后的常量值不能重复
 > 2. case 后可以有多个常量值
 > 3. fallthrough 应该是某个 case 的最后一行。如果它出现在中间的某个地方，编译器就会抛出错误。
+
+### 循环语句
+
+循环语句表示条件满足，可以反复的执行某段代码。
+
+for 是唯一的循环语句。(Go 没有 while 循环)
+
+#### for 语句
+
+语法结构：
+
+```go
+for init; condition; post { }
+```
+
+> 初始化语句只执行一次。在初始化循环之后，将检查该条件。如果条件计算为 true，那么{}中的循环体将被执行，然后是 post 语句。post 语句将在循环的每次成功迭代之后执行。在执行 post 语句之后，该条件将被重新检查。如果它是正确的，循环将继续执行，否则循环终止。
+
+示例代码：
+
+```go
+func cyclic() {
+  for i := 0; i < 10; i++ {
+    fmt.Printf(" %d", i)
+  }
+}
+```
+
+> 在 for 循环中声明的变量仅在循环范围内可用。因此，i 不能在外部访问循环。
+
+#### for 变体
+
+**所有的三个组成部分，即初始化、条件和 post 都是可选的。**
+
+```go
+for condition { }
+```
+
+效果与 while 相似
+
+```go
+for { }
+```
+
+效果与 for(;;) 一样
+
+for 循环的 range 格式可以对 slice、map、数组、字符串等进行迭代循环
+
+```go
+for key, value := range oldMap {
+    newMap[key] = value
+}
+```

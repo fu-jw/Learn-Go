@@ -81,7 +81,7 @@ func switch_branch() {
 }
 
 // 同一个目录下只能有一个 main 函数
-func main() {
-	if_branch()
-	switch_branch()
-}
+// func main() {
+// 	if_branch()
+// 	switch_branch()
+// }
