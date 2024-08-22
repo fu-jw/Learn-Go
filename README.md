@@ -1507,3 +1507,95 @@ Map 是一种集合，所以我们可以像迭代数组和切片那样迭代它�
 - map 的长度是不固定的，也就是和 slice 一样，也是一种引用类型
 - 内置的 len 函数同样适用于 map，返回 map 拥有的 key 的数量
 - map 的 key 可以是所有可比较的类型，如布尔型、整数型、浮点型、复杂型、字符串型……也可以键。
+
+### map 使用
+
+可以使用内建函数 make 也可以使用 map 关键字来定义 Map:
+
+```go
+/* 声明变量，默认 map 是 nil */
+var map_variable map[key_data_type]value_data_type
+
+/* 使用 make 函数 */
+map_variable = make(map[key_data_type]value_data_type)
+```
+
+```go
+rating := map[string]float32 {"C":5, "Go":4.5, "Python":4.5, "C++":2 }
+```
+
+如果不初始化 map，那么就会创建一个 nil map。nil map 不能用来存放键值对
+
+### 常用操作
+
+- delete
+
+delete(map, key) 函数用于删除集合的元素, 参数为 map 和其对应的 key。删除函数不返回任何值。
+
+```go
+/* 删除元素 */
+delete(countryCapitalMap,"France");
+fmt.Println("Entry for France is deleted")
+
+fmt.Println("删除元素后 map")
+
+/* 打印 map */
+for country := range countryCapitalMap {
+  fmt.Println("Capital of",country,"is",countryCapitalMap[country])
+}
+```
+
+- ok-idiom
+  我们可以通过 key 获取 map 中对应的 value 值。语法为：
+
+```go
+map[key]
+```
+
+但是当 key 如果不存在的时候，我们会得到该 value 值类型的默认值，比如 string 类型得到空字符串，int 类型得到 0。但是程序不会报错。
+
+所以我们可以使用 ok-idiom 获取值，可知道 key/value 是否存在
+
+```go
+value, ok := map[key]
+```
+
+```go
+/* 查看元素在集合中是否存在 */
+capital, ok := countryCapitalMap["United States"]
+/* 如果 ok 是 true, 则存在，否则不存在 */
+if ok {
+  fmt.Println("Capital of United States is", capital)
+} else {
+  fmt.Println("Capital of United States is not present")
+}
+```
+
+- len
+  使用 len 函数可以确定 map 的长度。
+
+```go
+fmt.Println("Length of map is:", len(countryCapitalMap))
+```
+
+### map 是引用类型的
+
+与切片相似，映射是引用类型。当将映射分配给一个新变量时，它们都指向相同的内部数据结构。因此，一个的变化会反映另一个。
+
+```go
+var newMap map[string]string = countryCapitalMap
+newMap["United Kingdom"] = "London"
+fmt.Println("New map after adding UK:", newMap)
+fmt.Println("Original map:", countryCapitalMap)
+/* 注意：对 newMap 的操作并不影响 countryCapitalMap */
+fmt.Println("Length of new map is:", len(newMap))
+fmt.Println("Is newMap the same as countryCapitalMap?", &newMap == &countryCapitalMap)
+/* 注意：newMap 和 countryCapitalMap 并不是同一个 map */
+fmt.Println("Country capital of United Kingdom is:", newMap["United Kingdom"])
+fmt.Println("Country capital of United Kingdom is:", countryCapitalMap["United Kingdom"])
+```
+
+> 注意：
+> map 不能使用==操作符进行比较。
+> ==只能用来检查 map 是否为空。否则会报错：
+> invalid operation: map1 == map2 (map can only be compared to nil)
