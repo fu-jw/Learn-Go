@@ -596,26 +596,25 @@ func increment() func() int { //外层函数
 	return fun
 }
 
-func main() {
-	myFunc1()
-	myFunc2()
-	// 可变参数
-	myFunc3()
-	// 参数传递
-	myFunc4()
-	// 返回值
-	myFunc5()
-	// 作用域
-	myFunc6()
-	// defer 函数
-	myFunc7()
-	// 函数类型
-	myFunc8()
-	// 匿名函数
-	myFunc9()
-	// 高阶函数
-	myFunc10()
-	// 闭包
-	myFunc11()
-
-}
+// func main() {
+// 	myFunc1()
+// 	myFunc2()
+// 	// 可变参数
+// 	myFunc3()
+// 	// 参数传递
+// 	myFunc4()
+// 	// 返回值
+// 	myFunc5()
+// 	// 作用域
+// 	myFunc6()
+// 	// defer 函数
+// 	myFunc7()
+// 	// 函数类型
+// 	myFunc8()
+// 	// 匿名函数
+// 	myFunc9()
+// 	// 高阶函数
+// 	myFunc10()
+// 	// 闭包
+// 	myFunc11()
+// }
