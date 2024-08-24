@@ -233,6 +233,19 @@ type Student2 struct {
 
 // =================================================================
 // OOP
+
+// 1.定义父类
+type Person3 struct {
+	name string
+	age  int
+}
+
+// 2.定义子类
+type Student3 struct {
+	Person3        //模拟继承结构
+	school  string //子类的新增属性
+}
+
 func OOP() {
 	/*
 		面向对象：OOP
@@ -289,22 +302,10 @@ func OOP() {
 
 }
 
-// 1.定义父类
-type Person3 struct {
-	name string
-	age  int
-}
-
-// 2.定义子类
-type Student3 struct {
-	Person3        //模拟继承结构
-	school  string //子类的新增属性
-}
-
-func main() {
-	// funcStruct()
-	// structPointer()
-	// anonStruct()
-	// nestStruct()
-	OOP()
-}
+// func main() {
+// 	// funcStruct()
+// 	// structPointer()
+// 	// anonStruct()
+// 	// nestStruct()
+// 	OOP()
+// }
