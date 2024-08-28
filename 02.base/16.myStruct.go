@@ -57,7 +57,6 @@ func structPointer() {
 
 			引用类型：slice，map，function，pointer
 
-
 		通过指针：
 			new()，不是nil，空指针
 				指向了新分配的类型的内存空间，里面存储的零值。
